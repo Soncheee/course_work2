@@ -41,4 +41,3 @@ if __name__ == "__main__":
     print(category2.description)
     print(len(category2.products))
     print(category2.products)
-

@@ -21,5 +21,3 @@ class Category:
         self.products = products if products is not None else []
         Category.total_category += 1
         Category.total_products += len(self.products)
-
-
