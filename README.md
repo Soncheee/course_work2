@@ -1,5 +1,5 @@
-# 16.1 Наследование
-## Файл classes.py содержит класс Product с дочерними классами Smartphone и LawnGrass
+# 16.2 Множественное наследование
+## Файл mro_slots.py содержит класс Product с дочерними классами Smartphone и LawnGrass
 ## c методом __add__ для сложения товаров из одинаковых классов продуктов и super() для расширения свойств
 ```    def __add__(self, other):
         if issubclass(type(other), self.__class__):
@@ -28,6 +28,17 @@ class LawnGrass(Product):
         self.country = country
         self.germination_period = germination_period
         self.color = color
+```
+
+### Также файл содержит абстрактный класс BaseProduct и миксин MixinLog
+### Добавлен тест для миксина в test_mro_slots.py:
+
+```def test_mixin_log_initialization():
+    product = Product("Test Product", 100, 5, "Description")
+    assert product.name == "Test Product"
+    assert product.price == 100
+    assert product.quantity == 5
+    assert product.description == "Description"
 ```
 
 ### Функциональный код покрыт тестами на 99%.
