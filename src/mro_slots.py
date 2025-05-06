@@ -34,8 +34,11 @@ class Product(MixinLog, BaseProduct):
         super().__init__(name, price, quantity, description)
         self.name = name
         self.__price = price
-        self.quantity = quantity
         self.description = description
+        if quantity > 0:
+            self.quantity = quantity
+        else:
+            raise ValueError("Товар с нулевым количеством не может быть добавлен.")
 
     @property
     def price(self):
@@ -59,7 +62,7 @@ class Product(MixinLog, BaseProduct):
         name = params.get("name")
         price = params.get("price")
         quantity = params.get("quantity")
-        description = params.get("description")  # Добавляем description
+        description = params.get("description")
         return cls(name, price, quantity, description)
 
     def __str__(self):
@@ -76,8 +79,9 @@ class Category:
     category_count = 0
     product_count = 0
 
-    def __init__(self, name):
+    def __init__(self, name, description, products=None):
         self.name = name
+        self.description = description
         self.__products = []
         Category.category_count += 1
         Category.product_count += len(self.__products)
@@ -104,6 +108,13 @@ class Category:
     def __str__(self):
         total_quantity = sum(product.quantity for product in self.products)
         return f"{self.name}, количество продуктов: {total_quantity} шт."
+
+    def middle_price(self):
+        try:
+            return sum([product.price for product in self.__products]) / len(self.__products)
+        except ZeroDivisionError:
+            return 0
+
 
 
 class Smartphone(Product):

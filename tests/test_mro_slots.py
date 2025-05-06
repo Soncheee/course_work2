@@ -1,6 +1,7 @@
 import pytest
 
-from src.classes import Category, LawnGrass, Product, Smartphone
+
+from src.mro_slots import Category, LawnGrass, Product, Smartphone
 
 def test_mixin_log_initialization():
     product = Product("Test Product", 100, 5, "Description")
@@ -70,32 +71,33 @@ def test_add_method():
 
 
 def test_category_initialization():
-    category = Category("Test Category")
+    category = Category("Test Category", 'Category')
     assert category.name == "Test Category"
+    assert category.description == 'Category'
     assert category.products == []
-    assert Category.category_count == 5
-    assert Category.product_count == 6
+    assert Category.category_count == 1
+    assert Category.product_count == 0
 
 
 def test_add_product():
-    category = Category("Test Category")
+    category = Category("Test Category", 'Category')
     product1 = Product("Product 1", 100.0, 5, "Description 1")
     product2 = Product("Product 2", 200.0, 10, "Description 2")
 
     category.add_product(product1)
     assert len(category.products) == 1
-    assert Category.product_count == 7
+    assert Category.product_count == 1
 
     category.add_product(product2)
     assert len(category.products) == 2
-    assert Category.product_count == 8
+    assert Category.product_count == 2
 
     with pytest.raises(TypeError):
         category.add_product("Invalid Product")
 
 
 def test_products_list():
-    category = Category("Test Category")
+    category = Category("Test Category", 'Category')
     product1 = Product("Product 1", 100.0, 5, "Description 1")
     product2 = Product("Product 2", 200.0, 10, "Description 2")
 
@@ -108,7 +110,7 @@ def test_products_list():
 
 
 def test_category_str_method():
-    category = Category("Test Category")
+    category = Category("Test Category", 'Category')
     product1 = Product("Product 1", 100.0, 5, "Description 1")
     product2 = Product("Product 2", 200.0, 10, "Description 2")
 
@@ -150,3 +152,15 @@ def test_lawn_grass_initialization():
     assert lawn_grass.country == "USA"
     assert lawn_grass.germination_period == "7 days"
     assert lawn_grass.color == "Green"
+
+
+def test_middle_price_category():
+    product1 = Product("Samsung Galaxy S23 Ultra", "256GB, Серый цвет, 200MP камера", 180000.0, 7)
+    product2 = Product("Iphone 15", "512GB, Gray space", 210000.0, 10)
+    product3 = Product("Xiaomi Redmi Note 11", "1024GB, Синий", 31000.0, 6)
+
+    category1 = Category("Смартфоны", "Категория смартфонов", [product1, product2, product3])
+    assert category1.middle_price() == 0
+
+    category_empty = Category("Смартфоны", "Категория смартфонов",[])
+    assert category_empty.middle_price() == 0
